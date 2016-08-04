@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>transform 3D</title>
+    <style type="text/css">
+    .content {
+        padding: 100px 0;
+    }
+    
+    .content_area {
+        width: 100%;
+        min-height: 100px;
+        margin: 0 auto;
+        background-color: #fff;
+        -webkit-perspective: 800px;
+        -moz-perspective: 800px;
+        perspective: 800px;
+        position: relative;
+    }
+    
+    .content_container {
+        width: 128px;
+        height: 100px;
+        margin-left: -64px;
+        -webkit-transition: -webkit-transform 1s;
+        -moz-transition: -moz-transform 1s;
+        transition: transform 1s;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        position: absolute;
+        left: 50%;
+    }
+    
+    .content_container img {
+        width: 128px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+        -webkit-transition: opacity 1s, -webkit-transform 1s;
+        -moz-transition: opacity 1s, -moz-transform 1s;
+        transition: opacity 1s, transform 1s;
+        position: absolute;
+        bottom: 0;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="content_area J-area">
+            <div class="content_container J-imgs">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    // 浏览器选择器API
+    var $ = function(selector) {
+        return document.querySelector(selector);
+    }
+
+    var $$ = function(selector) {
+        return document.querySelectorAll(selector);
+    };
+
+    // CSS transform变换应用
+    var transform = function(element, value, key) {
+        key = key || 'Transform';
+        ['Moz', 'O', 'Ms', 'Webkit', ''].forEach(function(prefix) {
+            element.style[prefix + key] = value;
+        });
+
+        return element;
+    }
+
+    // 显示图片
+    var htmlPic = '';
+    var arrayPic = [1, 8, 3, 4, 6, 7, 10, 13, 15];
+    var rotate = 360 / arrayPic.length;
+    arrayPic.forEach(function(i) {
+        htmlPic = htmlPic + '<img id="piece' + i + '" src="./imgs/mm' + i + '.jpg" class="piece" />';
+    });
+
+    var eleStage = $('.J-area');
+    var eleContainer = $('.J-imgs');
+    var indexPiece = 0;
+    var elePics = $$('.piece');
+    var transZ = 64 / Math.tan((rotate / 2 / 180) * Math.PI);
+    eleContainer.innerHTML = htmlPic;
+    eleContainer.addEventListener('click', function() {
+        transform(this, 'rotateY(' + (-1 * rotate * ++indexPiece) + 'deg)');
+    });
+
+    arrayPic.forEach(function(i, j) {
+        transform($('#piece' + i), 'rotateY(' + j * rotate + 'deg) translateZ(' + (transZ + 20) + 'px)');
+    });
+
+    setInterval(function() {
+    	transform(eleContainer, 'rotateY(' + (-1 * rotate * ++indexPiece) + 'deg)');
+    }, 500);
+    </script>
+</body>
+
+</html>
